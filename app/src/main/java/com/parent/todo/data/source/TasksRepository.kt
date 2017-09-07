@@ -14,13 +14,7 @@ object TasksRepository : TasksDataSource {
     private val localDataSource = TasksLocalDataSource
 
     override fun loadTasks(): Observable<List<Task>> =
-            Observable.fromCallable {
-                listOf(Task("0", "Task0", "Dummy body 0", System
-                        .currentTimeMillis(), System.currentTimeMillis() + 5000,
-                        false), Task("1", "Task1", "Dummy body 1", System
-                        .currentTimeMillis(), System.currentTimeMillis() + 5000,
-                        false))
-            }
+            localDataSource.loadTasks()
 
     override fun loadTask(taskId: String): Single<Task> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

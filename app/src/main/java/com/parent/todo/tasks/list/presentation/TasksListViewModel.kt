@@ -10,7 +10,6 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import org.jetbrains.anko.error
 import tv.niceq8i.app.common.domain.ObservableUseCase
 import kotlin.properties.Delegates
@@ -43,16 +42,15 @@ class TasksListViewModel(application: Application,
         isEmptyObservable.onNext(newValue)
     }
 
-    init {
-        debug("init")
-    }
+    private var firstLoad = true
 
     fun start() {
-        loadTasks()
+        loadTasks(firstLoad)
+        firstLoad = false
     }
 
-    fun loadTasks() {
-        isLoadingVisible = true
+    fun loadTasks(forceUpdate: Boolean) {
+        isLoadingVisible = forceUpdate
         loadTasksUseCase.getObservable().flatMap {
             mapTasks(it)
         }.subscribeBy(onNext = {

@@ -7,6 +7,8 @@ import android.view.View
 import com.parent.todo.R
 import com.parent.todo.common.ui.BaseActivity
 import com.parent.todo.data.source.TasksRepository
+import com.parent.todo.tasks.flow.TasksFlow
+import com.parent.todo.tasks.flow.TasksFlowController
 import com.parent.todo.tasks.list.domain.LoadTasksUseCase
 import com.parent.todo.tasks.model.TaskViewModelMapper
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +22,10 @@ import tv.niceq8i.app.common.domain.executor.UiThreadExecutor
  * Created by mahmoud on 9/4/17.
  */
 class TasksListActivity : BaseActivity() {
+    private val RC_ADD_TASK = 0
+
     private lateinit var viewModel: TasksListViewModel
+    private lateinit var tasksFlow: TasksFlow
     private val tasksListAdapter = TasksListAdapter(mutableListOf())
     private var compositeDisposable = CompositeDisposable()
 
@@ -33,6 +38,8 @@ class TasksListActivity : BaseActivity() {
                         UiThreadExecutor(), TasksRepository), TaskViewModelMapper())
 
         viewModel = ViewModelProviders.of(this, factory).get(TasksListViewModel::class.java)
+
+        tasksFlow = TasksFlowController(this)
 
         tasks_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -61,6 +68,12 @@ class TasksListActivity : BaseActivity() {
         compositeDisposable.add(viewModel.loadingErrorObservable.subscribeBy({
             toast(it)
         }))
+
+        compositeDisposable.add(viewModel.showAddTaskObservable.subscribe {
+            if (it) {
+                tasksFlow.openAddTask(RC_ADD_TASK)
+            }
+        })
 
         viewModel.start()
     }

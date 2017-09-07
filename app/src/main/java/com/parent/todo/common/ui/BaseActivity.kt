@@ -48,7 +48,7 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleOwner {
     private fun initToolbar() {
         toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar?.apply {
-            title = ""
+            title = this@BaseActivity.title
             setSupportActionBar(this)
         }
 

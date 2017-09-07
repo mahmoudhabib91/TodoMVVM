@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".tasks.list.presentation.TasksListActivity"/>
+        <activity android:name=".tasks.add.presentation.AddTaskActivity"/>
     </application>
 
 </manifest>

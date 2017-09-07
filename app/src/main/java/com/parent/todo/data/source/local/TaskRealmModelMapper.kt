@@ -10,6 +10,7 @@ class TaskRealmModelMapper : ModelMapper<TaskRealm, Task> {
     override fun map(from: TaskRealm): Task {
         val task = Task()
         task.id = from.id
+        task.title = from.title
         task.body = from.body
         task.createData = from.createDate
         task.dueDate = from.dueDate
